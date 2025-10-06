@@ -2,6 +2,46 @@ I would like to introduce a new fork of the popular generative neural network **
 I would like to point out that this fork can be run both locally on your computer and via Google Colab. 
 Let's look at everything in order. 
 
+**Full list of differences from the original Fooocus**
+
+1. Modules running during generation
+   - OneButtonPrompt
+   - Prompt Translate
+   - PhotoMaker
+   - InstantID
+   - Inswapper
+   - CodeFormer
+   - Vector
+2. Additional modules
+   - Image Batch
+   - Prompt Batch
+   - X/Y/Z Plot
+   - Inswapper
+   - CodeFormer
+   - Remove Background
+   - Vector
+3. Tools
+   - Civitai Helper
+   - TextMask
+   - SVGcode
+   - Roller
+   - OpenPoseEditor
+   - Logo
+   - Photopea
+4. Select the resolution and aspect ratio of the generated image
+5. Wildcard
+6. OpenPose ControlNet
+7. Recolor ControlNet
+8. Scribble ControlNet
+9. Manga Recolor ControlNet
+10. Save Image Grid for Each Batch
+11. Filename Prefix
+12. Paths and Presets
+13. Load file of style
+14. View LoRA trigger words and view the models page on civitai.com
+15. Seamless tiling
+16. Transparency
+
 **Launch**. If you will run it on a local machine, you can safely skip this item.
    
 ![image](https://github.com/user-attachments/assets/468487b8-8d4e-454c-ba92-1c9e5b60feb7)
@@ -381,17 +421,34 @@ The preset saves the following parameters: base model, refiner, refiner_switch, 
 
 Allows you to upload a file (in *.json format) with custom styles
 
-**View trigger words of LoRA**
+**View LoRA trigger words and view the models page on civitai.com**
 
-![image](https://github.com/user-attachments/assets/0ea83134-b8ec-4960-a436-c8343d0762f7)
+<img width="482" height="543" alt="image" src="https://github.com/user-attachments/assets/0d5d905c-738f-4e17-9fbb-44456def2fad" />
 
-If trigger words are not shown, then you need to scan LoRa, in the Civitai Helper module in the Scan Models for Civitai section
+If trigger words or links to model pages are not displayed, you will need to scan the models in the Civitai Helper module in the "Scan Models" section.
 
 **Seamless tiling**
 
 <img width="368" height="138" alt="image" src="https://github.com/user-attachments/assets/71564718-7048-4ce9-96df-24a145ede961" />
 
 Settings for creating seamless tiles. Located in Advanced - Developer Debug Mode - Control - Tiled. Sometimes a little edge refinement is required in any Photo Editor.
+
+**Transparency**
+
+<img width="452" height="152" alt="image" src="https://github.com/user-attachments/assets/a63e3921-f807-4872-9884-74698ce8a3e9" />
+
+<img width="385" height="100" alt="image" src="https://github.com/user-attachments/assets/4b65d0f9-905f-4a8b-b6dd-8cd13870e3a5" />
+
+Settings for creating images on a transparent background and a mask for it are located in the "Advanced" - "Developer Debug Mode" - "Controls" - "Transparency" section.
+
+<img width="971" height="487" alt="image" src="https://github.com/user-attachments/assets/04db5df6-d9ed-4b75-9073-c5dbdd4549f7" />
+
+None - the normal generation mode
+
+Attention Injection - This mode uses LoRA rank 256, turning SDXL into a transparent image generator. It transforms the model's latent distribution into a "transparent latent space" that can be decoded by a dedicated VAE pipeline.
+
+Conv Injection - This method uses an alternative model to transform SDXL into a transparent image generator. It uses biases on all convolutional layers (and, in fact, on all layers that are not q, k, v in any of the attention layers). These biases can be combined with any XL model to change the latent distribution to transparent images. Since learning the biases on all q, k, v layers was eliminated, the understanding of SDXL should be fully preserved. However, in practice, this first method has proven to yield better results. This method is used for some special cases that require special understanding. This method can have a strong impact on the style of the underlying model. This extension is based on layerdiffuse by lllyasviel (https://github.com/lllyasviel/sd-forge-layerdiffuse)
+
 
 <table>
   <tr>
@@ -408,6 +465,12 @@ All suggestions and questions can be voiced in the [Telegram-group](https://t.me
 
 
 ***Change log***
+
+v9.2.3
+ 1. View the models page on civitai.com
+
+v9.2.2
+ 1. Settings for Transparency generation
 
 v9.2.1
  1. Add Logo in tools
