@@ -173,40 +173,33 @@ class AsyncTask:
         self.should_enhance = self.enhance_checkbox and (self.enhance_uov_method != disabled.casefold() or len(self.enhance_ctrls) > 0)
         self.images_to_enhance_count = 0
         self.enhance_stats = {}
-        self.x_type = args.pop()
-        self.x_values = args.pop()
-        self.x_values_dropdown = args.pop()
-        self.y_type = args.pop()
-        self.y_values = args.pop()
-        self.y_values_dropdown = args.pop()
-        self.z_type = args.pop()
-        self.z_values = args.pop()
-        self.z_values_dropdown = args.pop()
-        self.draw_legend = args.pop()
-        self.include_lone_images = args.pop()
-        self.include_sub_grids = args.pop()
-        self.no_fixed_seeds = args.pop()
-        self.vary_seeds_x = args.pop()
-        self.vary_seeds_y = args.pop()
-        self.vary_seeds_z = args.pop()
-        self.margin_size = args.pop()
-        self.csv_mode = args.pop()
-        self.grid_theme = args.pop()
-        self.always_random = args.pop()
+
+        #!self.x_type = args.pop()
+        #!self.x_values = args.pop()
+        #!self.x_values_dropdown = args.pop()
+        #!self.y_type = args.pop()
+        #!self.y_values = args.pop()
+        #!self.y_values_dropdown = args.pop()
+        #!self.z_type = args.pop()
+        #!self.z_values = args.pop()
+        #!self.z_values_dropdown = args.pop()
+        #!self.draw_legend = args.pop()
+        #!self.include_lone_images = args.pop()
+        #!self.include_sub_grids = args.pop()
+        #!self.no_fixed_seeds = args.pop()
+        #!self.vary_seeds_x = args.pop()
+        #!self.vary_seeds_y = args.pop()
+        #!self.vary_seeds_z = args.pop()
+        #!self.margin_size = args.pop()
+        #!self.csv_mode = args.pop()
+        #!self.grid_theme = args.pop()
+        #!self.always_random = args.pop()
+
         self.translate_enabled = args.pop()
         self.srcTrans = args.pop()
         self.toTrans = args.pop()
         self.original_prompt = args.pop()
         self.original_negative = args.pop()
-        self.ratio = args.pop()
-        self.image_action = args.pop()
-        self.image_mode = args.pop()
-        self.ip_stop_batch = args.pop()
-        self.ip_weight_batch = args.pop()
-        self.upscale_mode = args.pop()
-        self.batch_prompt = args.pop()
-        self.positive_batch = args.pop()
-        self.negative_batch = args.pop()
         self.name_prefix = args.pop().strip().replace(" ", "_")
         self.inswapper_enabled = args.pop()
         self.inswapper_source_image_indicies = args.pop()
@@ -1223,8 +1216,6 @@ def worker():
             inpaint_image = HWC3(inpaint_image)
             if isinstance(inpaint_image, np.ndarray) and isinstance(inpaint_mask, np.ndarray) \
                     and (np.any(inpaint_mask > 127) or len(async_task.outpaint_selections) > 0):
-                #!progressbar(async_task, 1, 'Downloading upscale models ...')
-                #!modules.config.downloading_upscale_model2(async_task.uov_model)
                 modules.config.downloading_upscale_model2(async_task.uov_model)
                 if inpaint_parameterized:
                     progressbar(async_task, 1, 'Downloading inpainter ...')
@@ -1291,8 +1282,6 @@ def worker():
 
             if advance_progress:
                 current_progress += 1
-            #!progressbar(async_task, current_progress, 'Downloading upscale models ...')
-            #!modules.config.downloading_upscale_model2(async_task.uov_model)
             modules.config.downloading_upscale_model2(async_task.uov_model)
         return uov_input_image, skip_prompt_processing, steps
 
@@ -1806,10 +1795,7 @@ def worker():
         exception_result = None
         if 'adetail' in goals or async_task.adetailer_checkbox:
             from extentions.adetailer.aaaaaa.helper import disable_safe_unpickle
-            if async_task.refiner_model_name == 'None':
-                        use_synthetic_refiner = True
-                        async_task.refiner_switch = 0.8
-                        _, switch, _, _ = apply_overrides(async_task, async_task.steps, height, width)
+
             
             for index, img in enumerate(images_to_adetailer):
                 async_task.adetailer_stats[index] = 0
@@ -1838,7 +1824,7 @@ def worker():
                                 image=img if isinstance(img, Image.Image) else Image.fromarray(img),
                                 confidence=args.ad_confidence,
                                 classes=args.ad_model_classes,
-                                )
+                                device='cpu')
 
                     masks = adetailer.pred_preprocessing(pred, args)
                     if len(masks) == 0:
@@ -1862,12 +1848,9 @@ def worker():
                             async_task.sampler_name = args.ad_sampler
                         if args.ad_scheduler != "Use same scheduler":
                             async_task.scheduler_name = args.ad_scheduler
-                    if args.ad_use_denoising_strength :
-                        async_task.inpaint_strength  = args.ad_denoising_strength
-                    if args.ad_use_resp_field :
-                        async_task.inpaint_respective_field  = args.ad_resp_field
-                    if args.ad_use_inpaint_engine :
-                        async_task.inpaint_engine  = args.ad_inpaint_engine
+                    async_task.inpaint_strength  = args.ad_denoising_strength
+                    async_task.inpaint_respective_field  = args.ad_resp_field
+                    async_task.inpaint_engine  = args.ad_inpaint_engine
                     if args.ad_use_cfg_scale :
                         async_task.cfg_scale  = args.ad_cfg_scale
                     async_task.inpaint_disable_initial_latent = args.ad_disable_latent
